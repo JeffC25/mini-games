@@ -4,7 +4,10 @@ import (
 	"fmt"
 )
 
-
+type state struct {
+	turn int
+	board string[]
+}
 
 func printBoard(board []string) {
 	for i := 0; i < len(board); i++ {
