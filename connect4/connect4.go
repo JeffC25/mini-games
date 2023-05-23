@@ -41,10 +41,10 @@ func (s state) displayBoard(showColumn bool) {
 }
 
 // get move (row) from stdin
-func (s state) getMove() {
+func (s state) getMove() int {
 	// player turn
 	turn := s.turn % 2 + 1
-	fmt.Printf("Player %d's turn: ", turn)
+	fmt.Printf("Player %d's move: ", turn)
 
 	// get input
 	var column int
@@ -56,10 +56,11 @@ func (s state) getMove() {
 		fmt.Scanln(&discard)
 
 		// get input again
-		fmt.Printf("Invalid input. Player %d's turn: ", turn)
+		fmt.Printf("Invalid input. Player %d's move: ", turn)
 		fmt.Scanln(&column)
 	}
-	fmt.Printf("Column: %d\n", column)
+	// fmt.Printf("Column: %d\n", column)
+	return column
 }
 
 func main() {
