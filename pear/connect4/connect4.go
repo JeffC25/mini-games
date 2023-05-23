@@ -6,36 +6,29 @@ import (
 
 type state struct {
 	turn int
-	board string[]
+	board [][]string
 }
 
-func printBoard(board []string) {
-	for i := 0; i < len(board); i++ {
-		for j := 0; j < len(board[i]); j++ {
-			fmt.Printf("%c ", board[i][j])
-		}
-		fmt.Println();
+func newGame() state {
+	newState := state{} 
+	newState.turn = 0
+	newState.board = [][]string{
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
+		[]string{"- ", "- ", "- ", "- ", "- ", "- ", "- "},
 	}
+	return newState
 }
 
-
-func modifyArrah(board *[]string) {
-	(*board)[0][0] = 'x'
-	out := []rune(board)
-	out[0] = 'x'
-	return out
+func (s state) displayBoard() {
+	fmt.Println("test")
 }
 
 func main() {
-	board := []string{
-		"-------", 
-		"-------", 
-		"-------", 
-		"-------", 
-		"-------", 
-		"-------",
-	}
+	gameState := newGame()
 
-	modifyArrah(&board)
-	printBoard(board)
+	gameState.displayBoard()
 }
