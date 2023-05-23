@@ -1,6 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+)
 
 func printBoard(board []string) {
 	for i := 0; i < len(board); i++ {
