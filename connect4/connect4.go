@@ -14,7 +14,7 @@ type state struct {
 // intantiate new game state
 func newGame() state {
 	newState := state{} 
-	newState.turn = 0
+	newState.turn = 1
 	newState.board = [][]string{
 		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
 		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
@@ -42,25 +42,29 @@ func (s state) displayBoard(showColumn bool) {
 
 // get move (row) from stdin
 func (s state) getMove() int {
-	// player turn
-	turn := s.turn % 2 + 1
-	fmt.Printf("Player %d's move: ", turn)
-
 	// get input
 	var column int
+	fmt.Printf("Player %d's move: ", s.turn)
 	fmt.Scanln(&column)
     
-	for (column > 7 || column < 1) {
+	for (column > 7 || column < 1 || s.board[0][column - 1] != " - ") {
 		// flush input buffer
 		var discard string
 		fmt.Scanln(&discard)
 
 		// get input again
-		fmt.Printf("Invalid input. Player %d's move: ", turn)
+		fmt.Printf("Invalid input. Player %d's move: ", s.turn)
 		fmt.Scanln(&column)
 	}
 	// fmt.Printf("Column: %d\n", column)
 	return column
+}
+
+func (s state) makeMove(column int) {
+
+
+	// toggle player turn
+	s.turn = (s.turn % 2) + 1
 }
 
 func main() {
