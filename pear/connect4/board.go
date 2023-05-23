@@ -1,10 +1,10 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
-	"os"
 )
+
+
 
 func printBoard(board []string) {
 	for i := 0; i < len(board); i++ {
@@ -13,6 +13,14 @@ func printBoard(board []string) {
 		}
 		fmt.Println();
 	}
+}
+
+
+func modifyArrah(board *[]string) {
+	(*board)[0][0] = 'x'
+	out := []rune(board)
+	out[0] = 'x'
+	return out
 }
 
 func main() {
@@ -25,5 +33,6 @@ func main() {
 		"-------",
 	}
 
+	modifyArrah(&board)
 	printBoard(board)
 }
