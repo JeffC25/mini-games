@@ -28,6 +28,7 @@ func newGame() state {
 	return newState
 }
 
+// display board tile
 func (s state) displayTile(row int, column int) {
 	switch s.board[row][column] {
 	case 0:
@@ -92,6 +93,7 @@ func main() {
 	gameState := newGame()
 	gameState.displayBoard(true)
 	
+	// REPL 
 	for !gameState.isOver {
 		move := gameState.getMove() 
 		gameState.makeMove(move)
