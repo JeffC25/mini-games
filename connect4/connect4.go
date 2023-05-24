@@ -69,12 +69,18 @@ func (s state) getMove() int {
 		fmt.Printf("Invalid input. Player %d's move: ", s.turn)
 		fmt.Scanln(&column)
 	}
-	// fmt.Printf("Column: %d\n", column)
-	return column
+	// offset column by 1 for array
+	return column - 1
 }
 
 func (s state) makeMove(column int) {
-
+	// look for first available tile in column
+	for row := 5; row >= 0; row-- {
+		if s.board[row][column] == 0 {
+			s.board[row][column] = s.turn
+			break
+		}
+	}
 
 	// toggle player turn
 	s.turn = (s.turn % 2) + 1
@@ -84,5 +90,7 @@ func main() {
 	gameState := newGame()
 
 	gameState.displayBoard(true)
-	gameState.getMove() 
+	move := gameState.getMove() 
+	gameState.makeMove(move)
+	gameState.displayBoard(true)
 }
