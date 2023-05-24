@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	// "os"
 	// "bufio"
 )
@@ -29,8 +30,8 @@ func newGame() state {
 }
 
 // display board tile
-func (s state) displayTile(row int, column int) {
-	switch s.board[row][column] {
+func (s state) displayTile(row int, col int) {
+	switch s.board[row][col] {
 	case 0:
 		fmt.Printf(" - ")
 		return
@@ -43,14 +44,14 @@ func (s state) displayTile(row int, column int) {
 }
 
 // print board to stdout
-func (s state) displayBoard(showColumn bool) {
-	if showColumn{
+func (s state) displayBoard(showCol bool) {
+	if showCol{
 		fmt.Println(" 1  2  3  4  5  6  7 ")
 	}
 	
 	for row := 0; row < 6; row++ {
-		for column := 0; column < 7; column++ {
-			s.displayTile(row, column)
+		for col := 0; col < 7; col++ {
+			s.displayTile(row, col)
 		}
 		fmt.Println()
 	}
@@ -59,36 +60,36 @@ func (s state) displayBoard(showColumn bool) {
 // get move (row) from stdin
 func (s state) getMove() int {
 	// get input
-	var column int
+	var col int
 	fmt.Printf("Player %d's move: ", s.turn)
-	fmt.Scanln(&column)
+	fmt.Scanln(&col)
     
-	for (column > 7 || column < 1 || s.board[0][column - 1] != 0) {
+	for (col > 7 || col < 1 || s.board[0][col - 1] != 0) {
 		// flush input buffer
 		var discard string
 		fmt.Scanln(&discard)
 
 		// get input again
 		fmt.Printf("Invalid input. Player %d's move: ", s.turn)
-		fmt.Scanln(&column)
+		fmt.Scanln(&col)
 	}
-	// offset column by 1 for array
-	return column - 1
+	// offset col by 1 for array
+	return col - 1
 }
 
 // make player move
-func (s *state) makeMove(column int) (int, int) {
+func (s *state) makeMove(col int) (int, int) {
 	// look for first available tile in column
 		for row := 5; row >= 0; row-- {
-		if s.board[row][column] == 0 {
+		if s.board[row][col] == 0 {
 			// update tile
-			s.board[row][column] = s.turn
+			s.board[row][col] = s.turn
 
 			// update player turn
 			s.turn = s.turn % 2 + 1
 
 			// return tile position
-			return row, column
+			return row, col
 		}
 	}
 	return -1, -1
@@ -96,9 +97,9 @@ func (s *state) makeMove(column int) (int, int) {
 
 // check for horizontal win
 func (s state) checkHorizontal(row int) (bool) {
-	for column, counter := 0, 0; column < 7; column++ {
+	for col, counter := 0, 0; col < 7; col++ {
 		// increment or reset counter
-		if s.board[row][column] == (s.turn % 2 + 1) {
+		if s.board[row][col] == (s.turn % 2 + 1) {
 			counter++
 		} else {
 			counter = 0
@@ -113,10 +114,10 @@ func (s state) checkHorizontal(row int) (bool) {
 }
 
 // check for vertical win
-func (s state) checkVertical(column int) (bool) {
+func (s state) checkVertical(col int) (bool) {
 	for row, counter := 0, 0; row < 6; row++ {
 		// increment or reset counter
-		if s.board[row][column] == (s.turn % 2 + 1) {
+		if s.board[row][col] == (s.turn % 2 + 1) {
 			counter++
 		} else {
 			counter = 0
@@ -130,6 +131,16 @@ func (s state) checkVertical(column int) (bool) {
 	return false
 }
 
+// check for diagonal win
+func (s state) checkDiagonal (row int, col int) (bool) {
+	startRowTopLeft := row - math.Min(row, col)
+	startColTopLeft := col - math.Min(row, col)
+
+	offset := 6 - math.Max(row, col)
+	startRowBotRight := row + offset
+	startColBotRight := col + offset 
+}
+
 func main() {
 	gameState := newGame()
 	gameState.displayBoard(true)
@@ -137,8 +148,8 @@ func main() {
 	// REPL 
 	for !gameState.isOver {
 		move := gameState.getMove() 
-		moveRow, moveColumn := gameState.makeMove(move)
-		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveColumn))
+		moveRow, moveCol := gameState.makeMove(move)
+		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
 		
 		gameState.displayBoard(true)
 		println(win)
