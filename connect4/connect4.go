@@ -9,6 +9,7 @@ import (
 type state struct {
 	turn int
 	board [][]int
+	isOver bool
 }
 
 // intantiate new game state
@@ -23,6 +24,7 @@ func newGame() state {
 		[]int{0,0,0,0,0,0,0},
 		[]int{0,0,0,0,0,0,0},
 	}
+	newState.isOver = false
 	return newState
 }
 
@@ -88,10 +90,9 @@ func (s *state) makeMove(column int) {
 
 func main() {
 	gameState := newGame()
-
 	gameState.displayBoard(true)
 	
-	for test := 0; test < 8; test++ {
+	for !gameState.isOver {
 		move := gameState.getMove() 
 		gameState.makeMove(move)
 		gameState.displayBoard(true)
