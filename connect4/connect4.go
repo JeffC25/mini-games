@@ -133,12 +133,24 @@ func (s state) checkVertical(col int) (bool) {
 
 // check for diagonal win
 func (s state) checkDiagonal (row int, col int) (bool) {
-	startRowTopLeft := row - math.Min(row, col)
-	startColTopLeft := col - math.Min(row, col)
+	rowLT := row - int(math.Min(float64(row), float64(col))) // math.Min() does not take in ints ???
+	colLT := col - int(math.Min(float64(row), float64(col)))
+	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT + 1, colLT + 1 {
+		if s.board[rowLT][colLT] == (s.turn % 2 + 1) {
+			counter++
+		} else {
+			counter = 0
+		}
 
-	offset := 6 - math.Max(row, col)
-	startRowBotRight := row + offset
-	startColBotRight := col + offset 
+		if counter == 4 {
+			return true
+		}
+	}
+
+	// offset := 6 - math.Max(row, col)
+	// rowRB := row + offset
+	// colRB := col + offset 
+	return false
 }
 
 func main() {
@@ -149,7 +161,8 @@ func main() {
 	for !gameState.isOver {
 		move := gameState.getMove() 
 		moveRow, moveCol := gameState.makeMove(move)
-		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
+		//win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
+		win := gameState.checkDiagonal(moveRow, moveCol)
 		
 		gameState.displayBoard(true)
 		println(win)
