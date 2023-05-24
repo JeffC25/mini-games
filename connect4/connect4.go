@@ -90,7 +90,10 @@ func main() {
 	gameState := newGame()
 
 	gameState.displayBoard(true)
-	move := gameState.getMove() 
-	gameState.makeMove(move)
-	gameState.displayBoard(true)
+	
+	for test := 0; test < 8; test++ {
+		move := gameState.getMove() 
+		gameState.makeMove(move)
+		gameState.displayBoard(true)
+	}
 }
