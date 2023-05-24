@@ -76,17 +76,39 @@ func (s state) getMove() int {
 	return column - 1
 }
 
-// make player move and update turn
-func (s *state) makeMove(column int) {
+// make player move
+func (s *state) makeMove(column int) (int, int) {
 	// look for first available tile in column
-	for row := 5; row >= 0; row-- {
+		for row := 5; row >= 0; row-- {
 		if s.board[row][column] == 0 {
+			// update tile
 			s.board[row][column] = s.turn
-			break 
+
+			// update player turn
+			s.turn = s.turn % 2 + 1
+
+			// return tile position
+			return row, column
 		}
 	}
-	// update player turn
-	s.turn = s.turn % 2 + 1
+	return -1, -1
+}
+
+func (s state) checkHorizontal(row int) (bool) {
+	for column, counter:= 0, 0; column < 7; column++ {
+		// increment or reset counter
+		if s.board[row][column] == (s.turn % 2 + 1)  && s.board[row][column] != 0 {
+			counter++
+		} else {
+			counter = 0
+		}
+
+		// check counter
+		if counter == 4 {
+			return true
+		}
+	}
+	return false
 }
 
 func main() {
@@ -96,7 +118,11 @@ func main() {
 	// REPL 
 	for !gameState.isOver {
 		move := gameState.getMove() 
-		gameState.makeMove(move)
+		moveRow, _ := gameState.makeMove(move)
+		win := (gameState.checkHorizontal(moveRow))
+		
 		gameState.displayBoard(true)
+		println(win)
+		println("-------------")
 	}
 }
