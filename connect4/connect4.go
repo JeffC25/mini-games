@@ -8,22 +8,35 @@ import (
 
 type state struct {
 	turn int
-	board [][]string
+	board [][]int
 }
 
 // intantiate new game state
 func newGame() state {
 	newState := state{} 
 	newState.turn = 1
-	newState.board = [][]string{
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
-		[]string{" - ", " - ", " - ", " - ", " - ", " - ", " - "},
+	newState.board = [][]int{
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
 	}
 	return newState
+}
+
+func (s state) displayTile(row int, column int) {
+	switch s.board[row][column] {
+	case 0:
+		fmt.Printf(" - ")
+		return
+	case 1:
+		fmt.Printf(" X ")
+	case 2:
+		fmt.Printf(" O ")
+	}
+	return
 }
 
 // print board to stdout
@@ -47,7 +60,7 @@ func (s state) getMove() int {
 	fmt.Printf("Player %d's move: ", s.turn)
 	fmt.Scanln(&column)
     
-	for (column > 7 || column < 1 || s.board[0][column - 1] != " - ") {
+	for (column > 7 || column < 1 || s.board[0][column - 1] != 0) {
 		// flush input buffer
 		var discard string
 		fmt.Scanln(&discard)
