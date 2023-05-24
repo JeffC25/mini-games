@@ -45,9 +45,9 @@ func (s state) displayBoard(showColumn bool) {
 		fmt.Println(" 1  2  3  4  5  6  7 ")
 	}
 	
-	for _, row := range s.board {
-		for _, spot := range row {
-			fmt.Print(spot)
+	for row := 0; row < 6; row++ {
+		for column := 0; column < 7; column++ {
+			s.displayTile(row, column)
 		}
 		fmt.Println()
 	}
