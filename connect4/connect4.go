@@ -94,8 +94,27 @@ func (s *state) makeMove(column int) (int, int) {
 	return -1, -1
 }
 
+// check for horizontal win
 func (s state) checkHorizontal(row int) (bool) {
-	for column, counter:= 0, 0; column < 7; column++ {
+	for column, counter := 0, 0; column < 7; column++ {
+		// increment or reset counter
+		if s.board[row][column] == (s.turn % 2 + 1) {
+			counter++
+		} else {
+			counter = 0
+		}
+
+		// check counter
+		if counter == 4 {
+			return true
+		}
+	}
+	return false
+}
+
+// check for vertical win
+func (s state) checkVertical(column int) (bool) {
+	for row, counter := 0, 0; row < 6; row++ {
 		// increment or reset counter
 		if s.board[row][column] == (s.turn % 2 + 1) {
 			counter++
@@ -118,8 +137,8 @@ func main() {
 	// REPL 
 	for !gameState.isOver {
 		move := gameState.getMove() 
-		moveRow, _ := gameState.makeMove(move)
-		win := (gameState.checkHorizontal(moveRow))
+		moveRow, moveColumn := gameState.makeMove(move)
+		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveColumn))
 		
 		gameState.displayBoard(true)
 		println(win)
