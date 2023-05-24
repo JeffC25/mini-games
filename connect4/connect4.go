@@ -73,17 +73,17 @@ func (s state) getMove() int {
 	return column - 1
 }
 
-func (s state) makeMove(column int) {
+// make player move and update turn
+func (s *state) makeMove(column int) {
 	// look for first available tile in column
 	for row := 5; row >= 0; row-- {
 		if s.board[row][column] == 0 {
 			s.board[row][column] = s.turn
-			break
+			break 
 		}
 	}
-
-	// toggle player turn
-	s.turn = (s.turn % 2) + 1
+	// update player turn
+	s.turn = s.turn % 2 + 1
 }
 
 func main() {
