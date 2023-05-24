@@ -97,7 +97,7 @@ func (s *state) makeMove(column int) (int, int) {
 func (s state) checkHorizontal(row int) (bool) {
 	for column, counter:= 0, 0; column < 7; column++ {
 		// increment or reset counter
-		if s.board[row][column] == (s.turn % 2 + 1)  && s.board[row][column] != 0 {
+		if s.board[row][column] == (s.turn % 2 + 1) {
 			counter++
 		} else {
 			counter = 0
