@@ -30,7 +30,7 @@ func newGame() state {
 }
 
 // display board tile
-func (s state) displayTile(row int, col int) {
+func (s state) displayTile(row int8, col int8) {
 	switch s.board[row][col] {
 	case 0:
 		fmt.Printf(" - ")
@@ -49,8 +49,10 @@ func (s state) displayBoard(showCol bool) {
 		fmt.Println(" 1  2  3  4  5  6  7 ")
 	}
 	
-	for row := 0; row < 6; row++ {
-		for col := 0; col < 7; col++ {
+	var row int8
+	var col int8
+	for row = 0; row < 6; row++ {
+		for col = 0; col < 7; col++ {
 			s.displayTile(row, col)
 		}
 		fmt.Println()
@@ -58,9 +60,9 @@ func (s state) displayBoard(showCol bool) {
 }
 
 // get move (row) from stdin
-func (s state) getMove() int {
+func (s state) getMove() int8 {
 	// get input
-	var col int
+	var col int8
 	fmt.Printf("Player %d's move: ", s.turn)
 	fmt.Scanln(&col)
     
@@ -78,9 +80,10 @@ func (s state) getMove() int {
 }
 
 // make player move
-func (s state) makeMove(col int) (int, int) {
+func (s state) makeMove(col int8) (int8, int8) {
 	// look for first available tile in column
-		for row := 5; row >= 0; row-- {
+	var row int8
+	for row = 5; row >= 0; row-- {
 		if s.board[row][col] == 0 {
 			// update tile
 			s.board[row][col] = s.turn
@@ -98,7 +101,7 @@ func (s *state) updateTurn() {
 }
 
 // check for horizontal win
-func (s state) checkHorizontal(row int) (bool) {
+func (s state) checkHorizontal(row int8) (bool) {
 	for col, counter := 0, 0; col < 7; col++ {
 		// increment or reset counter
 		if s.board[row][col] == (s.turn) {
@@ -116,7 +119,7 @@ func (s state) checkHorizontal(row int) (bool) {
 }
 
 // check for vertical win
-func (s state) checkVertical(col int) (bool) {
+func (s state) checkVertical(col int8) (bool) {
 	for row, counter := 0, 0; row < 6; row++ {
 		// increment or reset counter
 		if s.board[row][col] == (s.turn) {
@@ -134,9 +137,9 @@ func (s state) checkVertical(col int) (bool) {
 }
 
 // check for diagonal win
-func (s state) checkDiagonal (row int, col int) (bool) {
-	rowLT := row - int(math.Min(float64(row), float64(col)))
-	colLT := col - int(math.Min(float64(row), float64(col)))
+func (s state) checkDiagonal (row int8, col int8) (bool) {
+	rowLT := row - int8(math.Min(float64(row), float64(col)))
+	colLT := col - int8(math.Min(float64(row), float64(col)))
 	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT + 1, colLT + 1 {
 		if s.board[rowLT][colLT] == (s.turn) {
 			counter++
