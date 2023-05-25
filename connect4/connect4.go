@@ -101,7 +101,7 @@ func (s *state) updateTurn() {
 func (s state) checkHorizontal(row int) (bool) {
 	for col, counter := 0, 0; col < 7; col++ {
 		// increment or reset counter
-		if s.board[row][col] == (s.turn % 2 + 1) {
+		if s.board[row][col] == (s.turn) {
 			counter++
 		} else {
 			counter = 0
@@ -119,7 +119,7 @@ func (s state) checkHorizontal(row int) (bool) {
 func (s state) checkVertical(col int) (bool) {
 	for row, counter := 0, 0; row < 6; row++ {
 		// increment or reset counter
-		if s.board[row][col] == (s.turn % 2 + 1) {
+		if s.board[row][col] == (s.turn) {
 			counter++
 		} else {
 			counter = 0
@@ -138,7 +138,7 @@ func (s state) checkDiagonal (row int, col int) (bool) {
 	rowLT := row - int(math.Min(float64(row), float64(col)))
 	colLT := col - int(math.Min(float64(row), float64(col)))
 	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT + 1, colLT + 1 {
-		if s.board[rowLT][colLT] == (s.turn % 2 + 1) {
+		if s.board[rowLT][colLT] == (s.turn) {
 			counter++
 		} else {
 			counter = 0
