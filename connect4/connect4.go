@@ -8,8 +8,8 @@ import (
 )
 
 type state struct {
-	turn byte
-	board [][]byte
+	turn int
+	board [][]int
 	isOver bool
 }
 
@@ -17,13 +17,13 @@ type state struct {
 func newGame() state {
 	newState := state{} 
 	newState.turn = 1
-	newState.board = [][]byte{
-		[]byte{0,0,0,0,0,0,0},
-		[]byte{0,0,0,0,0,0,0},
-		[]byte{0,0,0,0,0,0,0},
-		[]byte{0,0,0,0,0,0,0},
-		[]byte{0,0,0,0,0,0,0},
-		[]byte{0,0,0,0,0,0,0},
+	newState.board = [][]int{
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
+		[]int{0,0,0,0,0,0,0},
 	}
 	newState.isOver = false
 	return newState
