@@ -10,7 +10,6 @@ import (
 type state struct {
 	turn int8
 	board [][]int8
-	isOver bool
 }
 
 // intantiate new game state
@@ -25,7 +24,6 @@ func newGame() state {
 		[]int8{0,0,0,0,0,0,0},
 		[]int8{0,0,0,0,0,0,0},
 	}
-	newState.isOver = false
 	return newState
 }
 
@@ -44,7 +42,7 @@ func (s state) displayTile(row int8, col int8) {
 }
 
 // print board to stdout
-func (s state) displayBoard(showCol bool) {
+func (s state) displayBoard(showCol bool, showBar bool) {
 	if showCol{
 		fmt.Println(" 1  2  3  4  5  6  7 ")
 	}
@@ -56,6 +54,10 @@ func (s state) displayBoard(showCol bool) {
 			s.displayTile(row, col)
 		}
 		fmt.Println()
+	}
+
+	if showBar {
+		fmt.Println("--------------------")
 	}
 }
 
@@ -160,18 +162,23 @@ func (s state) checkDiagonal (row int8, col int8) (bool) {
 
 func main() {
 	gameState := newGame()
-	gameState.displayBoard(true)
+	gameState.displayBoard(true, true)
 	
 	// REPL 
-	for !gameState.isOver {
+	for {
 		move := gameState.getMove() 
 		moveRow, moveCol := gameState.makeMove(move)
-		
-		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
-		//win := gameState.checkDiagonal(moveRow, moveCol)
+		gameState.displayBoard(true, true)
+
+		if (
+			gameState.checkHorizontal(moveRow) || 
+			gameState.checkVertical(moveCol) ||
+			gameState.checkDiagonal(moveRow, moveCol)) {
+			fmt.Printf("Winner: Player %d\n", gameState.turn)
+
+			return
+		}
+			
 		gameState.updateTurn()
-		gameState.displayBoard(true)
-		println(win)
-		println("-------------")
 	}
 }
