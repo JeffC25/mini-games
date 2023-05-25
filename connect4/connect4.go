@@ -8,8 +8,8 @@ import (
 )
 
 type state struct {
-	turn int
-	board [][]int
+	turn int8
+	board [][]int8
 	isOver bool
 }
 
@@ -17,13 +17,13 @@ type state struct {
 func newGame() state {
 	newState := state{} 
 	newState.turn = 1
-	newState.board = [][]int{
-		[]int{0,0,0,0,0,0,0},
-		[]int{0,0,0,0,0,0,0},
-		[]int{0,0,0,0,0,0,0},
-		[]int{0,0,0,0,0,0,0},
-		[]int{0,0,0,0,0,0,0},
-		[]int{0,0,0,0,0,0,0},
+	newState.board = [][]int8{
+		[]int8{0,0,0,0,0,0,0},
+		[]int8{0,0,0,0,0,0,0},
+		[]int8{0,0,0,0,0,0,0},
+		[]int8{0,0,0,0,0,0,0},
+		[]int8{0,0,0,0,0,0,0},
+		[]int8{0,0,0,0,0,0,0},
 	}
 	newState.isOver = false
 	return newState
@@ -163,10 +163,10 @@ func main() {
 	for !gameState.isOver {
 		move := gameState.getMove() 
 		moveRow, moveCol := gameState.makeMove(move)
-		gameState.updateTurn()
-		//win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
-		win := gameState.checkDiagonal(moveRow, moveCol)
 		
+		win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
+		//win := gameState.checkDiagonal(moveRow, moveCol)
+		gameState.updateTurn()
 		gameState.displayBoard(true)
 		println(win)
 		println("-------------")
