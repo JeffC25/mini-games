@@ -78,21 +78,23 @@ func (s state) getMove() int {
 }
 
 // make player move
-func (s *state) makeMove(col int) (int, int) {
+func (s state) makeMove(col int) (int, int) {
 	// look for first available tile in column
 		for row := 5; row >= 0; row-- {
 		if s.board[row][col] == 0 {
 			// update tile
 			s.board[row][col] = s.turn
 
-			// update player turn
-			s.turn = s.turn % 2 + 1
-
 			// return tile position
 			return row, col
 		}
 	}
 	return -1, -1
+}
+
+// update player turn
+func (s *state) updateTurn() {
+	s.turn = s.turn % 2 + 1
 }
 
 // check for horizontal win
@@ -133,7 +135,7 @@ func (s state) checkVertical(col int) (bool) {
 
 // check for diagonal win
 func (s state) checkDiagonal (row int, col int) (bool) {
-	rowLT := row - int(math.Min(float64(row), float64(col))) // math.Min() does not take in ints ???
+	rowLT := row - int(math.Min(float64(row), float64(col)))
 	colLT := col - int(math.Min(float64(row), float64(col)))
 	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT + 1, colLT + 1 {
 		if s.board[rowLT][colLT] == (s.turn % 2 + 1) {
@@ -161,6 +163,7 @@ func main() {
 	for !gameState.isOver {
 		move := gameState.getMove() 
 		moveRow, moveCol := gameState.makeMove(move)
+		gameState.updateTurn()
 		//win := (gameState.checkHorizontal(moveRow) || gameState.checkVertical(moveCol))
 		win := gameState.checkDiagonal(moveRow, moveCol)
 		
