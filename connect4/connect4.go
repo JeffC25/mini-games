@@ -8,21 +8,21 @@ import (
 )
 
 type state struct {
-	turn int8
+	turn  int8
 	board [][]int8
 }
 
 // intantiate new game state
 func newGame() state {
-	newState := state{} 
+	newState := state{}
 	newState.turn = 1
 	newState.board = [][]int8{
-		[]int8{0,0,0,0,0,0,0},
-		[]int8{0,0,0,0,0,0,0},
-		[]int8{0,0,0,0,0,0,0},
-		[]int8{0,0,0,0,0,0,0},
-		[]int8{0,0,0,0,0,0,0},
-		[]int8{0,0,0,0,0,0,0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
+		[]int8{0, 0, 0, 0, 0, 0, 0},
 	}
 	return newState
 }
@@ -43,10 +43,10 @@ func (s state) displayTile(row int8, col int8) {
 
 // print board to stdout
 func (s state) displayBoard(showCol bool, showBar bool) {
-	if showCol{
+	if showCol {
 		fmt.Println(" 1  2  3  4  5  6  7 ")
 	}
-	
+
 	var row int8
 	var col int8
 	for row = 0; row < 6; row++ {
@@ -67,8 +67,8 @@ func (s state) getMove() int8 {
 	var col int8
 	fmt.Printf("Player %d's move: ", s.turn)
 	fmt.Scanln(&col)
-    
-	for (col > 7 || col < 1 || s.board[0][col - 1] != 0) {
+
+	for col > 7 || col < 1 || s.board[0][col-1] != 0 {
 		// flush input buffer
 		var discard string
 		fmt.Scanln(&discard)
@@ -99,11 +99,11 @@ func (s state) makeMove(col int8) (int8, int8) {
 
 // update player turn
 func (s *state) updateTurn() {
-	s.turn = s.turn % 2 + 1
+	s.turn = s.turn%2 + 1
 }
 
 // check for horizontal win
-func (s state) checkHorizontal(row int8) (bool) {
+func (s state) checkHorizontal(row int8) bool {
 	for col, counter := 0, 0; col < 7; col++ {
 		// increment or reset counter
 		if s.board[row][col] == (s.turn) {
@@ -121,7 +121,7 @@ func (s state) checkHorizontal(row int8) (bool) {
 }
 
 // check for vertical win
-func (s state) checkVertical(col int8) (bool) {
+func (s state) checkVertical(col int8) bool {
 	for row, counter := 0, 0; row < 6; row++ {
 		// increment or reset counter
 		if s.board[row][col] == (s.turn) {
@@ -139,10 +139,10 @@ func (s state) checkVertical(col int8) (bool) {
 }
 
 // check for diagonal win
-func (s state) checkDiagonal (row int8, col int8) (bool) {
+func (s state) checkDiagonalLT(row int8, col int8) bool {
 	rowLT := row - int8(math.Min(float64(row), float64(col)))
 	colLT := col - int8(math.Min(float64(row), float64(col)))
-	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT + 1, colLT + 1 {
+	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT+1, colLT+1 {
 		if s.board[rowLT][colLT] == (s.turn) {
 			counter++
 		} else {
@@ -156,29 +156,31 @@ func (s state) checkDiagonal (row int8, col int8) (bool) {
 
 	// offset := 6 - math.Max(row, col)
 	// rowRB := row + offset
-	// colRB := col + offset 
+	// colRB := col + offset
 	return false
+}
+
+func (s state) checkDiagonalRB(row int8, col int8) bool {
+
 }
 
 func main() {
 	gameState := newGame()
 	gameState.displayBoard(true, true)
-	
-	// REPL 
+
+	// REPL
 	for {
-		move := gameState.getMove() 
+		move := gameState.getMove()
 		moveRow, moveCol := gameState.makeMove(move)
 		gameState.displayBoard(true, true)
 
-		if (
-			gameState.checkHorizontal(moveRow) || 
+		if gameState.checkHorizontal(moveRow) ||
 			gameState.checkVertical(moveCol) ||
-			gameState.checkDiagonal(moveRow, moveCol)) {
+			gameState.checkDiagonalLT(moveRow, moveCol) {
 			fmt.Printf("Winner: Player %d\n", gameState.turn)
-
 			return
 		}
-			
+
 		gameState.updateTurn()
 	}
 }
