@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math"
+	"math/rand"
 	// "os"
 	// "bufio"
 )
@@ -61,7 +62,7 @@ func (s state) displayBoard(showCol bool, showBar bool) {
 	}
 }
 
-// get move (row) from stdin
+// get move (col) from stdin -> input is 1-7, output is 0-6
 func (s state) getMove() int8 {
 	// get input
 	var col int8
@@ -79,6 +80,15 @@ func (s state) getMove() int8 {
 	}
 	// offset col by 1 for array
 	return col - 1
+}
+
+// get random move (col)
+func (s state) randMove() int8 {
+	col := int8(rand.Intn(7))
+	for s.board[0][col] != 0 {
+		col = int8(rand.Intn(7))
+	}
+	return col
 }
 
 // make player move
@@ -99,7 +109,7 @@ func (s state) makeMove(col int8) (int8, int8) {
 
 // update player turn
 func (s *state) updateTurn() {
-	s.turn = s.turn%2 + 1
+	s.turn = 1 + s.turn%2
 }
 
 // check for horizontal win
@@ -138,10 +148,11 @@ func (s state) checkVertical(col int8) bool {
 	return false
 }
 
-// check for diagonal win
+// check for diagonal win LT -> RB
 func (s state) checkDiagonalLT(row int8, col int8) bool {
 	rowLT := row - int8(math.Min(float64(row), float64(col)))
 	colLT := col - int8(math.Min(float64(row), float64(col)))
+
 	for counter := 0; rowLT < 6 && colLT < 7; rowLT, colLT = rowLT+1, colLT+1 {
 		if s.board[rowLT][colLT] == (s.turn) {
 			counter++
@@ -154,14 +165,30 @@ func (s state) checkDiagonalLT(row int8, col int8) bool {
 		}
 	}
 
-	// offset := 6 - math.Max(row, col)
-	// rowRB := row + offset
-	// colRB := col + offset
 	return false
 }
 
-func (s state) checkDiagonalRB(row int8, col int8) bool {
+// check for diagonal win LB -> RT
+func (s state) checkDiagonalLB(row int8, col int8) bool {
+	offset := int8(math.Min(float64(5-row), float64(col)))
+	rowRB := row + offset
+	colRB := col - offset
+	fmt.Printf("row: %d, col: %d\n", row, col)
+	fmt.Printf("row: %d, col: %d\n", rowRB, colRB)
 
+	for counter := 0; rowRB >= 0 && colRB < 7; rowRB, colRB = rowRB-1, colRB+1 {
+		if s.board[rowRB][colRB] == (s.turn) {
+			counter++
+		} else {
+			counter = 0
+		}
+
+		if counter == 4 {
+			return true
+		}
+	}
+
+	return false
 }
 
 func main() {
@@ -176,7 +203,8 @@ func main() {
 
 		if gameState.checkHorizontal(moveRow) ||
 			gameState.checkVertical(moveCol) ||
-			gameState.checkDiagonalLT(moveRow, moveCol) {
+			gameState.checkDiagonalLT(moveRow, moveCol) ||
+			gameState.checkDiagonalLB(moveRow, moveCol) {
 			fmt.Printf("Winner: Player %d\n", gameState.turn)
 			return
 		}
