@@ -203,8 +203,9 @@ func main() {
 			gameState.checkVertical(moveCol) ||
 			gameState.checkDiagonalLT(moveRow, moveCol) ||
 			gameState.checkDiagonalLB(moveRow, moveCol) {
-			fmt.Printf("Winner: Player %d\n", gameState.turn)
-			return
+				winner := gameState.turn
+				fmt.Printf("Winner: Player %d\n", winner)
+				return
 		}
 
 		gameState.updateTurn()
