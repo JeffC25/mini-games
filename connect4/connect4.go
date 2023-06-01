@@ -173,8 +173,6 @@ func (s state) checkDiagonalLB(row int8, col int8) bool {
 	offset := int8(math.Min(float64(5-row), float64(col)))
 	rowRB := row + offset
 	colRB := col - offset
-	fmt.Printf("row: %d, col: %d\n", row, col)
-	fmt.Printf("row: %d, col: %d\n", rowRB, colRB)
 
 	for counter := 0; rowRB >= 0 && colRB < 7; rowRB, colRB = rowRB-1, colRB+1 {
 		if s.board[rowRB][colRB] == (s.turn) {
