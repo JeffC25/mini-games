@@ -22,8 +22,11 @@ func TestDiagonal(t *testing.T) {
 	
 	for i := 0; i < 6; i++ {
 		for j := 0; j < 7; j++ {
-			if testState.checkDiagonalLB(int8(i), int8(j)) || testState.checkDiagonalLT(int8(i), int8(j)) {
-				t.Error("False positive")
+			for k := 1; k < 3; k++ {
+				testState.turn = int8(k)
+				if testState.checkDiagonalLB(int8(i), int8(j)) || testState.checkDiagonalLT(int8(i), int8(j)) {
+					t.Error("False positive")
+				}
 			}
 		}
 	}
@@ -38,6 +41,7 @@ func TestDiagonal(t *testing.T) {
 		[]int8{1, 0, 0, 0, 0, 0, 0},
 	}
 
+	testState.turn = 1
 	if !testState.checkDiagonalLB(5, 0) {
 		t.Error("Should be diagonal win")
 	}
@@ -52,7 +56,7 @@ func TestDiagonal(t *testing.T) {
 		[]int8{0, 0, 0, 0, 0, 0, 0},
 	}
 
-	testState.updateTurn()
+	testState.turn = 2
 	if !testState.checkDiagonalLT(0, 0) {
 		t.Error("Should be diagonal win")
 	}
