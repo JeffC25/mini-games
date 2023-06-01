@@ -199,15 +199,10 @@ func main() {
 		moveRow, moveCol := gameState.makeMove(move)
 		gameState.displayBoard(true, true)
 
-		// if gameState.checkHorizontal(moveRow) ||
-		// 	gameState.checkVertical(moveCol) ||
-		// 	gameState.checkDiagonalLT(moveRow, moveCol) ||
-		// 	gameState.checkDiagonalLB(moveRow, moveCol) {
-		// 	fmt.Printf("Winner: Player %d\n", gameState.turn)
-		// 	return
-		// }
-
-		if gameState.checkDiagonalLB(moveRow, moveCol) {
+		if gameState.checkHorizontal(moveRow) ||
+			gameState.checkVertical(moveCol) ||
+			gameState.checkDiagonalLT(moveRow, moveCol) ||
+			gameState.checkDiagonalLB(moveRow, moveCol) {
 			fmt.Printf("Winner: Player %d\n", gameState.turn)
 			return
 		}
